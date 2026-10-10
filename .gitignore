@@ -233,3 +233,7 @@ key.properties
 local.properties
 *.jks
 *.keystore
+
+# The app source folder src/lib must be tracked (the Python template above ignores lib/)
+!src/lib/
+!src/lib/**

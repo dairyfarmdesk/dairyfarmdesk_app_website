@@ -28,7 +28,10 @@
     "title": "ग्राहक", "deliveries": "डिलीवरी", "payments": "भुगतान", "ledger": "खाता", "rate": "दर / ली.", "defaultRate": "डिफ़ॉल्ट दर",
     "morningL": "सुबह के ली.", "eveningL": "शाम के ली.", "active": "सक्रिय", "opening": "शुरुआती बकाया", "supplied": "दूध आपूर्ति",
     "paid": "भुगतान मिला", "outstanding": "बकाया", "mode": "तरीका", "bill": "मासिक बिल", "whatsapp": "व्हाट्सऐप", "stock": "स्टॉक जांच",
-    "produced": "उत्पादन", "difference": "घर उपयोग / बर्बादी / बछड़े", "absent": "अनुपस्थित", "addCustomer": "ग्राहक जोड़ें", "addPayment": "भुगतान जोड़ें"
+    "produced": "उत्पादन", "difference": "घर उपयोग / बर्बादी / बछड़े", "absent": "अनुपस्थित", "addCustomer": "ग्राहक जोड़ें", "addPayment": "भुगतान जोड़ें",
+    "cow": "गाय", "buffalo": "भैंस", "milkType": "दूध का प्रकार", "buysCow": "गाय का दूध लेता है", "buysBuffalo": "भैंस का दूध लेता है",
+    "pickType": "कम से कम एक दूध प्रकार चुनें", "cowSection": "गाय का दूध", "buffaloSection": "भैंस का दूध",
+    "deleteCustomer": "इस ग्राहक को हटाएं?", "cannotDelete": "हटा नहीं सकते: इसमें डिलीवरी या भुगतान दर्ज हैं। इसे निष्क्रिय करें।"
   },
   "exp": {
     "title": "खर्च", "item": "सामान", "qty": "मात्रा", "unit": "इकाई", "rate": "दर", "supplier": "सप्लायर", "category": "श्रेणी",

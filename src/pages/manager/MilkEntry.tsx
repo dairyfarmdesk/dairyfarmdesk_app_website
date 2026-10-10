@@ -5,6 +5,7 @@ import { useSave } from '@/lib/useSave'
 import { useToast } from '@/components/Toast'
 import { useAuth } from '@/lib/auth'
 import { Button, Card, Field, Input, Segmented, Select } from '@/components/ui'
+import DeleteButton from '@/components/DeleteButton'
 import { addDays, currentShift, fmtDate, L, todayIST, toNum } from '@/lib/format'
 import { sum, uuid } from '@/lib/utils'
 import type { Shift } from '@/lib/types'
@@ -160,7 +161,7 @@ export default function MilkEntry() {
           <div key={m.id} className="flex items-center justify-between px-4 py-2">
             <span className="font-bold">{animals.find((a) => a.id === m.animal_id)?.tag_no}</span>
             <span className="text-sm text-gray-600">{m.shift === 'Morning' ? t('morning') : t('evening')}</span>
-            <span className="font-extrabold">{L(m.litres)} L</span>
+            <span className="flex items-center font-extrabold">{L(m.litres)} L<DeleteButton table="milk_production" id={m.id} date={m.entry_date} /></span>
           </div>
         ))}
         {!dayRows.length && <div className="p-4 text-center text-gray-500">{t('noData')}</div>}

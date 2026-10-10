@@ -5,6 +5,7 @@ import { useSave } from '@/lib/useSave'
 import { useToast } from '@/components/Toast'
 import { useAuth } from '@/lib/auth'
 import { Button, Card, Field, Input, Select } from '@/components/ui'
+import DeleteButton from '@/components/DeleteButton'
 import { addDays, fmtDate, inr, todayIST } from '@/lib/format'
 import { uuid } from '@/lib/utils'
 import { PAY_MODES } from '@/lib/types'
@@ -51,7 +52,7 @@ export default function PaymentsPanel() {
         {pays.slice(0, 20).map((p) => (
           <div key={p.id} className="flex items-center justify-between px-4 py-2">
             <div><div className="font-bold">{name(p.customer_id)}</div><div className="text-xs text-gray-600">{fmtDate(p.entry_date)} · {p.mode}</div></div>
-            <div className="text-lg font-extrabold text-brand-800">{inr(p.amount)}</div>
+            <div className="flex items-center"><div className="text-lg font-extrabold text-brand-800">{inr(p.amount)}</div><DeleteButton table="customer_payments" id={p.id} date={p.entry_date} /></div>
           </div>
         ))}
         {!pays.length && <div className="p-4 text-center text-gray-500">{t('noData')}</div>}

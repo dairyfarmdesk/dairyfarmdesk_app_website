@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useExpenses } from '@/lib/data'
 import { Card, Input } from '@/components/ui'
+import DeleteButton from '@/components/DeleteButton'
 import { fmtDate, inr, monthEnd, monthStart, todayIST } from '@/lib/format'
 import { groupBy, sum } from '@/lib/utils'
 
@@ -35,7 +36,7 @@ export default function ExpenseSummary() {
         {list.map((e) => (
           <div key={e.id} className="flex items-center justify-between px-4 py-2">
             <div><div className="font-bold">{e.item_name}</div><div className="text-xs text-gray-600">{fmtDate(e.entry_date)} · {e.category}{e.supplier ? ` · ${e.supplier}` : ''}</div></div>
-            <div className="font-extrabold">{inr(e.amount)}</div>
+            <div className="flex items-center"><div className="font-extrabold">{inr(e.amount)}</div><DeleteButton table="expenses" id={e.id} date={e.entry_date} label={e.item_name} /></div>
           </div>
         ))}
         {!list.length && <div className="p-4 text-center text-gray-500">{t('noData')}</div>}

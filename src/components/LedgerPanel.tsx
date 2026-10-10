@@ -34,12 +34,26 @@ export default function LedgerPanel() {
   const waText = () => {
     if (!c) return ''
     const byDate = groupBy(mySales, (s) => s.entry_date)
-    const lines = Object.keys(byDate).sort().map((d) => `${fmtDate(d)}: ${L(sum(byDate[d], (s) => s.litres))} L`)
-    const rates = [...new Set(mySales.map((s) => s.rate))].join('/')
+    // One line per day; when a customer buys both milks the day shows cow and buffalo litres separately
+    const both = new Set(mySales.map((s) => s.milk_type ?? 'Cow')).size > 1
+    const lines = Object.keys(byDate).sort().map((d) => {
+      const rows = byDate[d]
+      if (!both) return `${fmtDate(d)}: ${L(sum(rows, (s) => s.litres))} L`
+      const cow = sum(rows.filter((s) => (s.milk_type ?? 'Cow') === 'Cow'), (s) => s.litres)
+      const buf = sum(rows.filter((s) => s.milk_type === 'Buffalo'), (s) => s.litres)
+      return `${fmtDate(d)}: Cow ${L(cow)} L, Buffalo ${L(buf)} L`
+    })
+    const rateLine = (type: 'Cow' | 'Buffalo') => {
+      const r = [...new Set(mySales.filter((s) => (s.milk_type ?? 'Cow') === type).map((s) => s.rate))].join('/')
+      return r ? `${type} rate: ₹${r}/L` : ''
+    }
+    const totals = both
+      ? ['Cow', 'Buffalo'].map((ty) => `${ty} litres: ${L(sum(mySales.filter((s) => (s.milk_type ?? 'Cow') === ty), (s) => s.litres))}`)
+      : []
     return [
       `*${settings?.farm_name || 'DairyFarmDesk'}*`, `Milk bill – ${month.split('-').reverse().join('-')}`, `Customer: ${c.name}`, '',
-      ...lines, '', `Total litres: ${L(totalL)}`, `Rate: ₹${rates}/L`, `Total amount: ${inr(total)}`, `Paid: ${inr(myPaid)}`, `*Balance due: ${inr(balance)}*`,
-    ].join('\n')
+      ...lines, '', ...totals, `Total litres: ${L(totalL)}`, rateLine('Cow'), rateLine('Buffalo'), `Total amount: ${inr(total)}`, `Paid: ${inr(myPaid)}`, `*Balance due: ${inr(balance)}*`,
+    ].filter((x, i, a) => x !== '' || a[i - 1] !== '').join('\n')
   }
   const share = () => {
     const phone = (c?.phone || '').replace(/\D/g, '')
@@ -50,7 +64,7 @@ export default function LedgerPanel() {
     if (!c) return
     billPDF({
       farm: settings?.farm_name || 'DairyFarmDesk', customer: c.name, month: month.split('-').reverse().join('-'), rate: '',
-      lines: mySales.map((s) => [fmtDate(s.entry_date), s.shift, L(s.litres), String(s.rate), String(s.amount)]),
+      lines: mySales.map((s) => [fmtDate(s.entry_date), `${s.shift} · ${s.milk_type ?? 'Cow'}`, L(s.litres), String(s.rate), String(s.amount)]),
       totalL, total, paid: myPaid, balance,
     })
   }

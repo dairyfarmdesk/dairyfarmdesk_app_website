@@ -5,6 +5,7 @@ import { useSave } from '@/lib/useSave'
 import { useToast } from '@/components/Toast'
 import { useAuth } from '@/lib/auth'
 import { Badge, Button, Card, Field, Input, Modal, Select } from '@/components/ui'
+import DeleteButton from '@/components/DeleteButton'
 import { addDays, fmtDate, inr, toNum, todayIST } from '@/lib/format'
 import { sum, uuid } from '@/lib/utils'
 import { LABOUR_TYPES, PAY_MODES, type Labourer } from '@/lib/types'
@@ -20,6 +21,11 @@ function WorkerForm({ w, onClose }: { w: Labourer | null; onClose: () => void })
     const ok = await save('labourers', 'upsert', { id: w?.id ?? uuid(), name: f.name.trim(), phone: f.phone || null, role: f.role || null, monthly_salary: toNum(f.monthly_salary) ?? 0, join_date: f.join_date || null, active: f.active })
     if (ok) onClose()
   }
+  // Workers with payment history can't be deleted (database refuses); mark them inactive instead.
+  const remove = async () => {
+    if (!w || !window.confirm(`${t('delete')} ${w.name}?`)) return
+    if (await save('labourers', 'delete', undefined, { id: w.id })) onClose()
+  }
   return (
     <Modal open onClose={onClose} title={w ? t('edit') : t('labour.addWorker')}>
       <div className="grid grid-cols-2 gap-3">
@@ -31,6 +37,7 @@ function WorkerForm({ w, onClose }: { w: Labourer | null; onClose: () => void })
         <label className="col-span-2 flex items-center gap-2 font-bold"><input type="checkbox" className="h-6 w-6" checked={f.active} onChange={(e) => setF({ ...f, active: e.target.checked })} /> {t('cust.active')}</label>
       </div>
       <div className="mt-4 flex gap-2"><Button variant="outline" className="flex-1" onClick={onClose}>{t('cancel')}</Button><Button className="flex-1" onClick={submit}>{t('save')}</Button></div>
+      {w && <Button variant="danger" className="mt-2 w-full" onClick={remove}>{t('delete')}</Button>}
     </Modal>
   )
 }
@@ -125,7 +132,7 @@ export default function LabourPanel() {
                   <div key={p.id} className="flex items-center justify-between border-b border-gray-50 py-1 text-sm">
                     <div><b>{fmtDate(p.entry_date)}</b> <Badge tone={p.pay_type === 'Advance' ? 'amber' : 'green'}>{p.pay_type}</Badge> <span className="text-xs text-gray-500">{p.mode}{p.note ? ` · ${p.note}` : ''}</span></div>
                     <div className="flex items-center gap-1"><b>{inr(p.amount)}</b>
-                      {isAdmin && <button className="text-xs text-red-600" onClick={() => window.confirm(t('delete') + '?') && save('labour_payments', 'delete', undefined, { id: p.id })}>✕</button>}
+                      <DeleteButton table="labour_payments" id={p.id} date={p.entry_date} />
                     </div>
                   </div>
                 ))}

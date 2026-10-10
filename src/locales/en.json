@@ -28,7 +28,10 @@
     "title": "Customers", "deliveries": "Deliveries", "payments": "Payments", "ledger": "Ledger", "rate": "Rate / L", "defaultRate": "Default rate",
     "morningL": "Default morning L", "eveningL": "Default evening L", "active": "Active", "opening": "Opening balance", "supplied": "Milk supplied",
     "paid": "Paid", "outstanding": "Outstanding", "mode": "Mode", "bill": "Monthly bill", "whatsapp": "WhatsApp", "stock": "Stock check",
-    "produced": "Produced", "difference": "Self use / wastage / calves", "absent": "Absent", "addCustomer": "Add customer", "addPayment": "Add payment"
+    "produced": "Produced", "difference": "Self use / wastage / calves", "absent": "Absent", "addCustomer": "Add customer", "addPayment": "Add payment",
+    "cow": "Cow", "buffalo": "Buffalo", "milkType": "Milk type", "buysCow": "Buys cow milk", "buysBuffalo": "Buys buffalo milk",
+    "pickType": "Select at least one milk type", "cowSection": "Cow milk", "buffaloSection": "Buffalo milk",
+    "deleteCustomer": "Delete this customer?", "cannotDelete": "Cannot delete: it has deliveries or payments. Mark it inactive instead."
   },
   "exp": {
     "title": "Expenses", "item": "Item", "qty": "Quantity", "unit": "Unit", "rate": "Rate", "supplier": "Supplier", "category": "Category",

@@ -5,6 +5,7 @@ import { useSave } from '@/lib/useSave'
 import { useToast } from '@/components/Toast'
 import { useAuth } from '@/lib/auth'
 import { Button, Card, Field, Input } from '@/components/ui'
+import DeleteButton from '@/components/DeleteButton'
 import { addDays, fmtDate, inr, L, todayIST } from '@/lib/format'
 import { groupBy, sum, uuid } from '@/lib/utils'
 
@@ -73,7 +74,7 @@ export default function CashPanel() {
                 <div className="font-bold">{inr(r.amount)}{r.litres ? <span className="font-normal text-gray-600"> · {L(r.litres)} L</span> : null}</div>
                 <div className="truncate text-xs text-gray-600">{r.handed_to ? `→ ${r.handed_to}` : t('cash.noOwner')}{r.note ? ` · ${r.note}` : ''}</div>
               </div>
-              {isAdmin && <button className="px-2 text-red-600" onClick={() => window.confirm(t('delete') + '?') && save('cash_collections', 'delete', undefined, { id: r.id })}>✕</button>}
+              <DeleteButton table="cash_collections" id={r.id} date={r.entry_date} />
             </div>
           ))}
         </Card>

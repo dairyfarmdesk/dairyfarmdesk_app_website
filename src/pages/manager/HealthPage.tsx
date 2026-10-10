@@ -5,6 +5,7 @@ import { useSave } from '@/lib/useSave'
 import { useToast } from '@/components/Toast'
 import { useAuth } from '@/lib/auth'
 import { Button, Card, Field, Input, Select, Textarea } from '@/components/ui'
+import DeleteButton from '@/components/DeleteButton'
 import { addDays, fmtDate, todayIST } from '@/lib/format'
 import { uuid } from '@/lib/utils'
 import { uploadFile } from '@/lib/supabase'
@@ -79,7 +80,7 @@ export default function HealthPage() {
       <Card className="divide-y divide-gray-100 !p-0">
         {med.slice(0, 25).map((m) => (
           <div key={m.id} className="px-4 py-2">
-            <div className="flex justify-between"><b>{tag(m.animal_id)} · {m.type}</b><span className="text-sm text-gray-600">{fmtDate(m.entry_date)}</span></div>
+            <div className="flex justify-between"><b>{tag(m.animal_id)} · {m.type}</b><span className="flex items-center text-sm text-gray-600">{fmtDate(m.entry_date)}<DeleteButton table="medical_records" id={m.id} date={m.entry_date} /></span></div>
             <div className="text-sm text-gray-700">{m.medicine || m.symptoms}</div>
           </div>
         ))}

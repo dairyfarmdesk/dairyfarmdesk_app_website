@@ -43,7 +43,9 @@ export default function AdminSales() {
           <DataTable rows={customers} exportName="customers" rowKey={(c) => c.id} cols={[
             { key: 'n', header: t('name'), value: (c) => c.name }, { key: 'p', header: t('phone'), value: (c) => c.phone },
             { key: 'a', header: t('area'), value: (c) => c.area }, { key: 't', header: t('type'), value: (c) => c.type },
+            { key: 'mt', header: t('cust.milkType'), value: (c) => [c.buys_cow && t('cust.cow'), c.buys_buffalo && t('cust.buffalo')].filter(Boolean).join(' + ') },
             { key: 'r', header: t('cust.rate'), value: (c) => Number(c.default_rate), align: 'right' },
+            { key: 'rb', header: t('cust.buffalo') + ' ' + t('cust.rate'), value: (c) => (c.buys_buffalo ? Number(c.default_rate_buffalo) : ''), align: 'right' },
             { key: 'm', header: t('cust.morningL'), value: (c) => Number(c.default_morning_litres), align: 'right' },
             { key: 'e', header: t('cust.eveningL'), value: (c) => Number(c.default_evening_litres), align: 'right' },
             { key: 'ac', header: t('status'), value: (c) => (c.active ? 'Active' : 'Inactive'), render: (c) => <Badge tone={c.active ? 'green' : 'gray'}>{c.active ? t('cust.active') : 'Inactive'}</Badge> },
@@ -54,7 +56,8 @@ export default function AdminSales() {
       {tab === 'sales' && (
         <DataTable rows={sales.slice().reverse()} exportName="milk-sales" rowKey={(s) => s.id} toolbar={range} cols={[
           { key: 'd', header: t('date'), value: (s) => fmtDate(s.entry_date) }, { key: 'c', header: t('nav.customers'), value: (s) => cname(s.customer_id) },
-          { key: 's', header: t('shift'), value: (s) => s.shift }, { key: 'l', header: t('litres'), value: (s) => Number(s.litres), align: 'right' },
+          { key: 's', header: t('shift'), value: (s) => s.shift }, { key: 'mt', header: t('cust.milkType'), value: (s) => (s.milk_type === 'Buffalo' ? t('cust.buffalo') : t('cust.cow')) },
+          { key: 'l', header: t('litres'), value: (s) => Number(s.litres), align: 'right' },
           { key: 'r', header: t('cust.rate'), value: (s) => Number(s.rate), align: 'right' }, { key: 'a', header: t('amount'), value: (s) => Number(s.amount), align: 'right' },
         ]} actions={(s) => (
           <Button size="sm" variant="ghost" className="text-red-600" onClick={() => window.confirm(t('delete') + '?') && save('milk_sales', 'delete', undefined, { id: s.id })}>{t('delete')}</Button>
