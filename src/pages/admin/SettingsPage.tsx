@@ -21,7 +21,7 @@ export default function SettingsPage() {
   const saveSettings = async () => {
     const { error } = await supabase.from('settings').update({
       farm_name: s.farm_name, default_rate: Number(s.default_rate) || 0, manager_edit_days: Number(s.manager_edit_days) || 0, logo_url: s.logo_url || null,
-    }).eq('id', 1)
+    }).eq('id', settings?.id ?? 1)
     if (error) return toast(error.message, 'err')
     toast(t('saved'))
     qc.invalidateQueries({ queryKey: ['settings'] })

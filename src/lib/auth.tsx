@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Session } from '@supabase/supabase-js'
-import { supabase } from './supabase'
+import { supabase, setUploadFolder } from './supabase'
 import type { Profile, Settings } from './types'
 
 interface AuthCtx {
@@ -9,6 +9,7 @@ interface AuthCtx {
   profile: Profile | null
   settings: Settings | null
   isAdmin: boolean
+  isPlatformAdmin: boolean
   loading: boolean
   signOut: () => Promise<void>
 }
@@ -44,11 +45,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
   })
   const set = useQuery({
-    queryKey: ['settings'],
-    enabled: !!uid,
+    queryKey: ['settings', prof.data?.farm_id ?? null],
+    enabled: !!uid && prof.isFetched,
     queryFn: async () => {
-      const { data } = await supabase.from('settings').select('*').eq('id', 1).maybeSingle()
+      // Multi-farm: the user's own farm settings. Before migration 0009 there is no farm_id, so fall back to the single row (id = 1).
+      const fid = prof.data?.farm_id
+      const q = supabase.from('settings').select('*')
+      const { data } = await (fid ? q.eq('farm_id', fid) : q.eq('id', 1)).maybeSingle()
       return data as Settings | null
+    },
+  })
+
+  // New uploads are stored under "<farm id>/"
+  useEffect(() => {
+    setUploadFolder(prof.data?.farm_id)
+  }, [prof.data?.farm_id])
+
+  // Platform owner (can open /platform). The database re-checks this on every call; this only shows or hides the link.
+  const plat = useQuery({
+    queryKey: ['is-platform-admin', uid],
+    enabled: !!uid,
+    retry: false,
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc('is_platform_admin')
+      return !error && data === true
     },
   })
 
@@ -57,6 +77,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     session,
     profile,
     settings: set.data ?? null,
+    isPlatformAdmin: plat.data === true,
     isAdmin: profile?.role === 'admin' && profile.active,
     loading: !ready || (!!uid && prof.isLoading),
     signOut: async () => {

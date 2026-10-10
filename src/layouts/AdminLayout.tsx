@@ -1,13 +1,13 @@
 import { NavLink, Outlet, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { LayoutDashboard, PawPrint, Milk, Users, Receipt, HeartPulse, HardHat, Banknote, FileBarChart, Settings, ScrollText, LogOut, Smartphone } from 'lucide-react'
+import { LayoutDashboard, PawPrint, Milk, Users, Receipt, HeartPulse, HardHat, Banknote, FileBarChart, Settings, ScrollText, LogOut, Smartphone, Building2 } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
 import { LangToggle, SyncStatus } from '@/components/Status'
 import { PublicFooter } from '@/pages/legal/LegalLayout'
 
 export default function AdminLayout() {
   const { t } = useTranslation()
-  const { settings, profile, signOut } = useAuth()
+  const { settings, profile, signOut, isPlatformAdmin } = useAuth()
   const items = [
     { to: '/admin', icon: LayoutDashboard, label: t('nav.dashboard'), end: true },
     { to: '/admin/animals', icon: PawPrint, label: t('nav.animals') },
@@ -45,6 +45,7 @@ export default function AdminLayout() {
         </nav>
         <div className="space-y-2 p-3">
           <Link to="/m" className="flex items-center gap-2 rounded-xl bg-brand-800 px-3 py-2 text-sm font-semibold"><Smartphone className="h-4 w-4" /> {t('nav.managerApp')}</Link>
+          {isPlatformAdmin && <Link to="/platform" className="flex items-center gap-2 rounded-xl bg-amber-500 px-3 py-2 text-sm font-semibold text-white"><Building2 className="h-4 w-4" /> Platform</Link>}
           <button onClick={signOut} className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-brand-100 hover:bg-brand-800"><LogOut className="h-4 w-4" /> {t('logout')}</button>
         </div>
       </aside>

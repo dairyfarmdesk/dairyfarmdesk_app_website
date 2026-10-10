@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import { supabase } from '@/lib/supabase'
+import { supabase, DB_SCHEMA } from '@/lib/supabase'
 import { useToast } from '@/components/Toast'
 import { Badge, Button, Card, Field, Input, Modal } from '@/components/ui'
 import type { Profile } from '@/lib/types'
 
 async function manage(body: Record<string, unknown>) {
-  const { data, error } = await supabase.functions.invoke('create-manager', { body })
+  const { data, error } = await supabase.functions.invoke('create-manager', { body: { ...body, schema: DB_SCHEMA } })
   if (error) {
     let msg = error.message
     try { msg = (await (error as any).context.json()).error || msg } catch { /* ignore */ }

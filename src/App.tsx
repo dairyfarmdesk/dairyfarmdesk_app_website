@@ -23,6 +23,7 @@ import CashPage from './pages/manager/CashPage'
 import Reports from './pages/admin/Reports'
 import SettingsPage from './pages/admin/SettingsPage'
 import AuditLog from './pages/admin/AuditLog'
+import PlatformPage from './pages/platform/PlatformPage'
 import About from './pages/legal/About'
 import PrivacyPolicy from './pages/legal/PrivacyPolicy'
 import Terms from './pages/legal/Terms'
@@ -49,6 +50,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Root />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/platform" element={<Guard><PlatformPage /></Guard>} />
       <Route path="/about" element={<About />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="/terms" element={<Terms />} />

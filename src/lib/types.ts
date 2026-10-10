@@ -13,8 +13,8 @@ export const MILK_TYPES = ['Cow', 'Buffalo'] as const
 export type MilkType = (typeof MILK_TYPES)[number]
 export const UNITS = ['kg', 'quintal', 'bag', 'trolley'] as const
 
-export interface Profile { id: string; full_name: string; email: string | null; phone: string | null; role: Role; active: boolean; created_at: string }
-export interface Settings { id: number; farm_name: string; logo_url: string | null; default_rate: number; manager_edit_days: number; language: string }
+export interface Profile { id: string; full_name: string; email: string | null; phone: string | null; role: Role; active: boolean; created_at: string; farm_id?: string }
+export interface Settings { id: number; farm_id?: string; farm_name: string; logo_url: string | null; default_rate: number; manager_edit_days: number; language: string }
 export interface Animal {
   id: string; tag_no: string; name: string | null; type: string; breed: string; dob: string | null
   purchase_date: string | null; purchase_price: number | null; source: string | null; status: string

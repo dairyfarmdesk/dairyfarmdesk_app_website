@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "icons": "node scripts/gen-icons.mjs"
+    "icons": "node scripts/gen-icons.mjs",
+    "test:saas": "node scripts/saas/test-tenancy.mjs && node scripts/saas/test-stg.mjs",
+    "build:stg-sql": "node scripts/build-stg-sql.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^7.6.9",
@@ -30,6 +32,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "^7.6.9",
+    "@electric-sql/pglite": "^0.5.8",
     "@types/node": "^26.6.4",
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
