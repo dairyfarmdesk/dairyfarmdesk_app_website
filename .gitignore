@@ -218,3 +218,18 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- DairyFarmDesk app ---
+node_modules
+dist
+.env
+.env.*
+!.env.example
+.vercel
+.DS_Store
+*.log
+supabase/.temp
+key.properties
+local.properties
+*.jks
+*.keystore
